@@ -48,6 +48,7 @@ let NoNeedCodes = [];
 
     console.log("jxCode:"+jxCode)
     await AAJxCode();
+    await $.wait(10*1000);
     
     if ($.isNode() && allMessage && $.ctrTemp) {
         await notify.sendNotify(`${$.name}`, `${allMessage}`)
