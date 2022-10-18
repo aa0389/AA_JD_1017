@@ -12,7 +12,7 @@ const { json } = require('stream/consumers');
 
 
 [Script]
-cron "6 6 6 6 6" tag=京东解析CODE
+cron "6 6 6 6 6" script-path=https://gitee.com/lxk0301/jd_scripts/raw/master/jd_fruit.js,tag=京东解析CODE
 
 export DO_TEN_WATER_AGAIN = "" 默认再次浇水
 */
