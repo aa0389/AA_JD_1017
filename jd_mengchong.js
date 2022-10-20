@@ -28,6 +28,7 @@ let notify = $.isNode() ? require('./sendNotify') : '';
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 let newShareCodes = [];
 let NoNeedCodes = [];
+$.ua="";
 if ($.isNode()) {
     Object.keys(jdCookieNode).forEach((item) => {
         if (jdCookieNode[item]) {
@@ -64,6 +65,8 @@ console.log(`共${cookiesArr.length}个京东账号\n`);
     if (llhelp){
         console.log('开始收集您的互助码，用于账号内部互助，请稍等...');
         for (let i = 0; i < cookiesArr.length; i++) {
+
+            getUa();
             if (cookiesArr[i]) {
                 cookie = cookiesArr[i];
                 $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1]);
@@ -94,6 +97,7 @@ console.log(`共${cookiesArr.length}个京东账号\n`);
     }
 
     for (let i = 0; i < cookiesArr.length; i++) {
+        getUa();
         if (cookiesArr[i]) {
             cookie = cookiesArr[i];
             $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1]);
@@ -578,7 +582,7 @@ function TotalBean() {
                 "Connection": "keep-alive",
                 "Cookie": cookie,
                 "Referer": "https://wqs.jd.com/my/jingdou/my.shtml?sceneval=2",
-                "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1")
+                "User-Agent": $.ua
             }
         }
         $.post(options, (err, resp, data) => {
@@ -640,6 +644,20 @@ async function request(function_id, body = {}) {
 //     }
 //   };
 // }
+
+function getUa(){
+    let arr =[
+        "jdmall;iphone;version/11.2.7;build/168311;network/wifi;screen/828x1792;os/14.8",
+        "jdmall;iphone;version/11.2.6;build/168304;network/wifi;screen/1242x2208;os/14.4",
+        "JD4iPhone/168311%20(iPhone;%20iOS;%20Scale/2.00)",
+        "JD4iPhone/168221%20(iPad;%20iOS;%20Scale/2.00)"
+    ]
+
+    let ran = Math.floor(Math.random()*arr.length);
+
+    $.ua =  arr[ran];
+    console.log(`ua:${$.ua}\n`);
+}
 function taskUrl(function_id, body = {}) {
     body["version"] = 2;
     body["channel"] = 'app';
@@ -648,7 +666,7 @@ function taskUrl(function_id, body = {}) {
         body: `body=${escape(JSON.stringify(body))}&appid=wh5&loginWQBiz=pet-town&clientVersion=9.0.4`,
         headers: {
             'Cookie': cookie,
-            'User-Agent': $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
+            'User-Agent': $.ua,
             'Host': 'api.m.jd.com',
             'Content-Type': 'application/x-www-form-urlencoded',
         }

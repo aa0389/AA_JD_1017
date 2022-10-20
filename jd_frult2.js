@@ -12,12 +12,12 @@
 [task_local]
  =========================Loon=============================
 [Script]
-cron "0 0 6,18 * * *" script-path=https://gitee.com/lxk0301/jd_scripts/raw/master/jd_fruit.js,tag=东东农场日常任务
+cron "7 7 7 7 7" script-path=https://gitee.com/lxk0301/jd_scripts/raw/master/jd_fruit.js,tag=东东农场日常任务2
 
 
 export DO_TEN_WATER_AGAIN = "" 默认再次浇水
 */
-const $ = new Env('东东农场日常任务');
+const $ = new Env('东东农场日常任务2');
 let cookiesArr = [], cookie = '', isBox = false, notify, allMessage = '';
 //助力好友分享码(最多3个,否则后面的助力失败),原因:京东农场每人每天只有3次助力机会
 //此此内容是IOS用户下载脚本到本地使用，填写互助码的地方，同一京东账号的好友互助码请使用@符号隔开。
