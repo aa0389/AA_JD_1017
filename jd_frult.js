@@ -12,7 +12,7 @@
 [task_local]
  =========================Loon=============================
 [Script]
-cron "0 0 6,18 * * *" script-path=https://gitee.com/lxk0301/jd_scripts/raw/master/jd_fruit.js,tag=东东农场日常任务
+cron "0 0 8,20 * * *" script-path=https://gitee.com/lxk0301/jd_scripts/raw/master/jd_fruit.js,tag=东东农场日常任务
 
 
 export DO_TEN_WATER_AGAIN = "" 默认再次浇水
