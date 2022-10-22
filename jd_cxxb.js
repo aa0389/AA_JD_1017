@@ -12,6 +12,8 @@ $.curlCmd = ""
 const h = (new Date()).getHours()
 const helpFlag = h >= 9 && h < 12
 const puzzleFlag = h >= 13 && h < 18
+var {window,get_log,Env,document}=require('./jdlog.js');//{window,document,navigator,screen,get_log,GetRandomNum,Env,get_log,GetRandomNum,Env}
+
 if ($.isNode()) {
     Object.keys(jdCookieNode).forEach((item) => {
         cookiesArr.push(jdCookieNode[item])
@@ -3602,6 +3604,9 @@ function getBody(_random) {
     let _0x1e9fe6 = _0x37a6aa(_keyjiami)['toString'](0x24);
     _0x1e9fe6 = _0x36e8da(_0x1e9fe6, 0x7);
     //let _data = '{"tm":[],"tnm":["d5-6L,ES,2EY,1.000,t","d7-6L,ES,2GB,1.000,t","d1-6M,ES,2H8,u,t"],"grn":1,"ss":"' + _time['toString']() + '5987","wed":"tttttfuf","wea":"ffttttua","pdn":[8,16,2,3,1,5],"jj":1,"cs":"' + _cs + '","np":"Linux i686","t":' + _time['toString']() + ',"jk":"' + _jk + '","fpb":"' + _fpb + '","nv":"Google Inc.","nav":"' + _nav + '","scr":[854,480],"ro":["' + _xinghao + '","android","' + _azbb + '","' + _rjbb + '","' + _nav + '","' + _uuid + '","a"],"ioa":"fffffftt","aj":"u","ci":"w3.2.4","cf_v":"01","bd":"random=' + _random + '","mj":[1,0,0],"blog":"a","msg":"a"}'
+
+    let random=window.smashUtils.getRandom(8);
+    let log = get_log(random);
     let _data = pinjie
     let _jiamidata1 = CryptoJS['enc']['Utf8']['parse'](unescape(encodeURIComponent(_zhuanzifu(_data, _key))));
     _jiamidata1 = CryptoJS['enc']['Base64']['stringify'](_jiamidata1);
@@ -3610,11 +3615,11 @@ function getBody(_random) {
     _keyjiami = _time['toString']() + '~1' + _suijizifu + _joyytoken + '~9,1~' + _keyjiami + '~' + _0x1e9fe6 + '~C~' + _jiamidata1 + '~' + _0x2f3398;
     s = JSON['stringify']({
         'extraData': {
-            'log': encodeURIComponent(_keyjiami),
+            'log': log,
             'sceneid': _sceneid
         },
         'secretp': _secretp,
-        'random': _random['toString']()
+        'random': random
     });
     if (_ss_log == '1') {
         return s;
