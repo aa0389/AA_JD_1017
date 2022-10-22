@@ -93,8 +93,8 @@ const JD_API_HOST = 'https://api.m.jd.com/client.action';
                             const c = maxAssistTimes - alreadyAssistTimes
                             console.log(`互助成功，获得${score}金币，他还需要${maxTimes - times}人完成助力，你还有${maxAssistTimes - alreadyAssistTimes}次助力机会`)
                             if (!c) break
-                            if (helpRes.data.result?.redpacket?.value) console.log('🧧', parseFloat(helpRes.data.result?.redpacket?.value))
-                            //console.log('助力结果：'+helpRes.data.bizMsg)
+                            // if (helpRes.data.result?.redpacket?.value) console.log('🧧', parseFloat(helpRes.data.result?.redpacket?.value))
+                            console.log('助力结果：'+helpRes)
                         }else if (bizCode==108) { //无助力
                             console.log(helpRes.data.bizMsg); break
                         }else if (bizCode==-201) {//好友人气爆棚，不需要助力啦~
@@ -107,8 +107,9 @@ const JD_API_HOST = 'https://api.m.jd.com/client.action';
                             break;
                         }else {
                             console.log(`互助失败，原因：${helpRes?.bizMsg}（${bizCode}）`)
-                            if (![0, -201, -202].includes(bizCode)) break
-                        }
+                            // if (![0, -201, -202].includes(bizCode))
+                            // break
+                                }
                         await $.wait(1000)
                     }else{
                         //{ code: -40300, msg: '运行环境异常，请您从正规途径参与活动，谢谢~' }
