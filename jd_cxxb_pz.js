@@ -34,45 +34,45 @@ let groups=[],g_i=0;
     await getUA()
 
 
-    let 队长用户名=[],队伍数量=cookiesArr.length>0?Math.ceil(cookiesArr.length/30):0;
-    for (let i = 0; i < cookiesArr.length; i++) {
-        if (cookiesArr[i]) {
-            cookie = cookiesArr[i];
-            $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
-            $.index = i + 1;
-            $.isLogin = true;
-            $.nickName = '';
-            message = '';
-            console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
-            $.newShareCodes = []
-            document.cookie=cookie;
-            /* await get_secretp()
-            if ($.huobao == false) {
-                console.log(`火爆`); continue;
-            }
-            await promote_collectAtuoScore() //定时领取
-            */
-            let res
-
-            //此处修改组队人数
-            if ( 队伍数量>groups.length ) {
-                res = await promote_pk_getHomeData()
-                if (res && res.data?.result?.groupInfo?.memberList) {
-                    let memberCount = res.data.result.groupInfo.memberList.length
-                    console.log('当前队伍有', memberCount, '人')
-                    let groupJoinInviteId = ""
-                    if (memberCount < 30) {
-                        //队伍数量--;
-                        队长用户名.push($.UserName);
-                        groupJoinInviteId = res.data.result.groupInfo.groupJoinInviteId
-                        res = await getEncryptedPinColor()
-                        groups.push({ mpin: res.result, groupJoinInviteId: groupJoinInviteId,num:memberCount  })
-                        console.log('队伍未满:', groupJoinInviteId)
-                    }
-                }
-            }else break;
-        }
-    }
+    // let 队长用户名=[],队伍数量=cookiesArr.length>0?Math.ceil(cookiesArr.length/30):0;
+    // for (let i = 0; i < cookiesArr.length; i++) {
+    //     if (cookiesArr[i]) {
+    //         cookie = cookiesArr[i];
+    //         $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
+    //         $.index = i + 1;
+    //         $.isLogin = true;
+    //         $.nickName = '';
+    //         message = '';
+    //         console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
+    //         $.newShareCodes = []
+    //         document.cookie=cookie;
+    //         /* await get_secretp()
+    //         if ($.huobao == false) {
+    //             console.log(`火爆`); continue;
+    //         }
+    //         await promote_collectAtuoScore() //定时领取
+    //         */
+    //         let res
+    //
+    //         //此处修改组队人数
+    //         if ( 队伍数量>groups.length ) {
+    //             res = await promote_pk_getHomeData()
+    //             if (res && res.data?.result?.groupInfo?.memberList) {
+    //                 let memberCount = res.data.result.groupInfo.memberList.length
+    //                 console.log('当前队伍有', memberCount, '人')
+    //                 let groupJoinInviteId = ""
+    //                 if (memberCount < 30) {
+    //                     //队伍数量--;
+    //                     队长用户名.push($.UserName);
+    //                     groupJoinInviteId = res.data.result.groupInfo.groupJoinInviteId
+    //                     res = await getEncryptedPinColor()
+    //                     groups.push({ mpin: res.result, groupJoinInviteId: groupJoinInviteId,num:memberCount  })
+    //                     console.log('队伍未满:', groupJoinInviteId)
+    //                 }
+    //             }
+    //         }else break;
+    //     }
+    // }
     try {
         for (let i = 0; i < cookiesArr.length; i++) {
             if (cookiesArr[i]) {
@@ -82,14 +82,16 @@ let groups=[],g_i=0;
                 $.isLogin = true;
                 $.nickName = '';
                 message = '';
-                if($.UserName && 队长用户名.indexOf($.UserName)!==-1) continue;
+                // if($.UserName && 队长用户名.indexOf($.UserName)!==-1) continue;
                 console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
-                if(groups.length>g_i){
+                // if(groups.length>g_i){
                     document.cookie=cookie;
-                    await aa_pz();
-
+                    let re = await aa_pz();
+                    if(re.data.bizCode == -19){
+                        break;
+                    }
                     await $.wait(3000)
-                }
+                // }
             }
         }
     } catch (e) {
@@ -120,7 +122,10 @@ function aa_pz() {
                         data = JSON.parse(data);
                         if (data.code === 0) {
                             console.log(`成功助力吗$：\n${JSON.stringify(data)}`)
+                            // data = JSON.parse(data);
+                            if(data.data.bizCode == 19){
 
+                            }
                             // if (data.data && data['data']['bizCode'] === 0) {
                             // }
                         } else {

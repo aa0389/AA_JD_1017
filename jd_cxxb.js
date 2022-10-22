@@ -551,9 +551,9 @@ function formatMsg(num, pre, ap) {
 }
 
 function getSs(secretp) {
-    $.random = 53554918
+    $.random=window.smashUtils.getRandom(8);
     $.sceneid = $.subSceneid ?? "RAhomePageh5"
-    const extraData = getBody(53554918)
+    const extraData = getBody($.random)
     return {
         extraData,
         secretp,
@@ -562,8 +562,8 @@ function getSs(secretp) {
 }
 
 function getSafeStr() {
-    $.random = 53554918
-    const log = getBody(53554918)
+    $.random=window.smashUtils.getRandom(8);
+    const log = getBody($.random)
     return {
         random: $.random,
         secreid: "HYJGJSh5",
@@ -572,9 +572,10 @@ function getSafeStr() {
 }
 
 function getWxSs(secretp) {
-    $.random = 53554918
+    $.random=window.smashUtils.getRandom(8);
+    // $.random = 53554918
     $.secreid = "HYJhPagewx"
-    const extraData = getBody(53554918)
+    const extraData = getBody($.random)
     return {
         extraData,
         secretp,
@@ -3593,9 +3594,10 @@ function _zhuanzifu(canshu1, canshu2) {
 }
 
 function getBody(_random) {
-    if (_random == "") {
-        _random = 53554918;
-    }
+    // if (_random == "") {
+    //     _random = 53554918;
+    // }
+    //  _random=window.smashUtils.getRandom(8);
     let _suijizifu = _0x3ae16b(![], 0xa);
     //let _time = Date['now']();
     let _key = getkey(_suijizifu, _time['toString']());
@@ -3605,8 +3607,10 @@ function getBody(_random) {
     _0x1e9fe6 = _0x36e8da(_0x1e9fe6, 0x7);
     //let _data = '{"tm":[],"tnm":["d5-6L,ES,2EY,1.000,t","d7-6L,ES,2GB,1.000,t","d1-6M,ES,2H8,u,t"],"grn":1,"ss":"' + _time['toString']() + '5987","wed":"tttttfuf","wea":"ffttttua","pdn":[8,16,2,3,1,5],"jj":1,"cs":"' + _cs + '","np":"Linux i686","t":' + _time['toString']() + ',"jk":"' + _jk + '","fpb":"' + _fpb + '","nv":"Google Inc.","nav":"' + _nav + '","scr":[854,480],"ro":["' + _xinghao + '","android","' + _azbb + '","' + _rjbb + '","' + _nav + '","' + _uuid + '","a"],"ioa":"fffffftt","aj":"u","ci":"w3.2.4","cf_v":"01","bd":"random=' + _random + '","mj":[1,0,0],"blog":"a","msg":"a"}'
 
-    let random=window.smashUtils.getRandom(8);
-    let log = get_log(random);
+
+    let log = get_log(_random);
+    console.log("_random:"+_random)
+    console.log("\nlog:"+log)
     let _data = pinjie
     let _jiamidata1 = CryptoJS['enc']['Utf8']['parse'](unescape(encodeURIComponent(_zhuanzifu(_data, _key))));
     _jiamidata1 = CryptoJS['enc']['Base64']['stringify'](_jiamidata1);
@@ -3619,7 +3623,7 @@ function getBody(_random) {
             'sceneid': _sceneid
         },
         'secretp': _secretp,
-        'random': random
+        'random': _random
     });
     if (_ss_log == '1') {
         return s;
