@@ -4,7 +4,7 @@ cron "1 8 * * *" jd_cxxb_team.js, tag:快速升级，跑一次即可
 */
 var {window,get_log,Env,document}=require('./jdlog.js');//{window,document,navigator,screen,get_log,GetRandomNum,Env,get_log,GetRandomNum,Env}
 
-const $ = new Env('穿行寻宝-助力组队');
+const $ = new Env('穿行寻宝-膨胀');
 
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 
@@ -22,7 +22,7 @@ if ($.isNode()) {
     cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
 }
 const JD_API_HOST = 'https://api.m.jd.com/client.action';
-
+const cxxbCode = process.env.JD_CXXB_CODE
 
 let groups=[],g_i=0;
 !(async () => {
@@ -86,38 +86,8 @@ let groups=[],g_i=0;
                 console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
                 if(groups.length>g_i){
                     document.cookie=cookie;
-                    res = await promote_pk_getHomeData()
-                    if (res?.data?.result?.groupInfo?.memberList) {
-                        let memberCount = res.data.result.groupInfo.memberList.length
-                        if (memberCount === 1) {
-                            console.log('\n开始加入队伍：', groups[g_i].groupJoinInviteId)
-                            res = await collectFriendRecordColor(groups[g_i].mpin)
-                            res = await promote_pk_joinGroup(groups[g_i].groupJoinInviteId)
-                            if(res && res.data){
-                                console.log(`promote_pk_joinGroup:\n${JSON.stringify(res)}`)
-                                console.log('\n当前人数：',groups[g_i].num,"\n")
-                                if (res.data.bizCode === 0) {
-                                    groups[g_i].num++;
-                                    console.log('加入队伍成功+1')
-                                    if(groups[g_i].num>=30) g_i++;
-                                }else if(res.data.bizCode === -3){//来晚了|该团队已经满员了
-                                    console.log(res.data.bizMsg);
-                                    g_i++;
-                                    if(groups.length>g_i){
-                                        i--;
-                                    }
-                                    //continue;
-                                } else {
-                                    console.log(res.data.bizCode+res.data.bizMsg)
-                                }
-                            }else{
-                                //{ code: -40300, msg: '运行环境异常，请您从正规途径参与活动，谢谢~' }
-                                console.log(res)
-                            }
-                            await $.wait(3000)
-                            //res = await promote_pk_getHomeData()
-                        }else console.log('跳过组队！')
-                    }else console.log(`promote_pk_getHomeData:\n${JSON.stringify(res)}`)
+                    await aa_pz();
+
                     await $.wait(3000)
                 }
             }
@@ -132,6 +102,42 @@ let groups=[],g_i=0;
     .finally(() => {
         $.done();
     })
+
+
+
+function aa_pz() {
+    let random=window.smashUtils.getRandom(8);
+    let log = get_log(random);
+    let body = {"random":random,"log":log,"actionType":"0","inviteId":cxxbCode}
+    return new Promise((resolve) => {
+        $.post(taskPostUrl("promote_pk_collectPkExpandScore", body), async(err, resp, data) => {
+            try {
+                if (err) {
+                    console.log(`${JSON.stringify(err)}`)
+                    console.log(`${$.name} API请求失败，请检查网路重试`)
+                } else {
+                    if (safeGet(data)) {
+                        data = JSON.parse(data);
+                        if (data.code === 0) {
+                            console.log(`成功助力吗$：\n${JSON.stringify(data)}`)
+
+                            // if (data.data && data['data']['bizCode'] === 0) {
+                            // }
+                        } else {
+                            //签到失败:{"code":-40300,"msg":"运行环境异常，请您从正规途径参与活动，谢谢~"}
+                            console.log(`promote_pk_collectPkExpandScore:\n${JSON.stringify(data)}\n`)
+                        }
+                    }
+                }
+            } catch (e) {
+                $.logErr(e, resp)
+            } finally {
+                resolve(data);
+            }
+        })
+    })
+}
+
 
 function promote_collectAtuoScore() {
     let random=window.smashUtils.getRandom(8);
