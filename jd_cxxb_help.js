@@ -2,6 +2,8 @@
 建议手动先点开一次
 cron "1 15 * * *" jd_cxxb_help.js, tag:快速签到升级，助力跑一次即可
 */
+import {wait} from "./TS_USER_AGENTS";
+
 var {window,get_log,Env}=require('./jdlog.js');//{window,document,navigator,screen,get_log,GetRandomNum,Env,get_log,GetRandomNum,Env}
 
 const $ = new Env('穿行寻宝-助力');
@@ -61,6 +63,9 @@ const JD_API_HOST = 'https://api.m.jd.com/client.action';
     }
     try {
         for (let i = 0; i < cookiesArr.length; i++) {
+            await $.wait(60 * 1000)
+            console.log(`\n休息一分钟\n`);
+
             if (cookiesArr[i]) {
                 cookie = cookiesArr[i];
                 $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
@@ -77,6 +82,8 @@ const JD_API_HOST = 'https://api.m.jd.com/client.action';
 
                 let helpRes,bizCode
                 for (let j = 0; j < inviteId.length; j++) {
+                    await $.wait(6 * 1000)
+
                     console.log(`\n开始助力 【${inviteId[j]}】`)
                     helpRes = await help(inviteId[j])
                     /*
