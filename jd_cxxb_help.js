@@ -98,7 +98,7 @@ const JD_API_HOST = 'https://api.m.jd.com/client.action';
                         }else if (bizCode==108) { //无助力
                             console.log(helpRes.data.bizMsg); break
                         }else if (bizCode==-201) {//好友人气爆棚，不需要助力啦~
-                            console.log(helpRes.data.bizMsg);
+                            console.log(helpRes);
                             inviteId.splice(j, 1)
                             //$.newHelpCodeArr = $.newHelpCodeArr.filter(x => x.pin !== pin)
                             j--
@@ -106,7 +106,8 @@ const JD_API_HOST = 'https://api.m.jd.com/client.action';
                         }else if (bizCode==-1002) {//运行环境异常，请您从正规途径参与活动，谢谢~
                             break;
                         }else {
-                            console.log(`互助失败，原因：${helpRes?.bizMsg}（${bizCode}）`)
+                            console.log(helpRes);
+                            console.log(log`互助失败，原因：${helpRes?.bizMsg}（${bizCode}）`)
                             // if (![0, -201, -202].includes(bizCode))
                             // break
                                 }
