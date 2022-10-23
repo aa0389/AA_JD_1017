@@ -107,7 +107,7 @@ const JD_API_HOST = 'https://api.m.jd.com/client.action';
                             break;
                         }else {
                             console.log(helpRes);
-                            console.log(log`互助失败，原因：${helpRes?.bizMsg}（${bizCode}）`)
+                            // console.log(log`互助失败，原因：${helpRes?.bizMsg}（${bizCode}）`)
                             // if (![0, -201, -202].includes(bizCode))
                             // break
                                 }
