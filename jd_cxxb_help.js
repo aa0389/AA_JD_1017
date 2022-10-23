@@ -94,11 +94,14 @@ const JD_API_HOST = 'https://api.m.jd.com/client.action';
                             console.log(`互助成功，获得${score}金币，他还需要${maxTimes - times}人完成助力，你还有${maxAssistTimes - alreadyAssistTimes}次助力机会`)
                             if (!c) break
                             // if (helpRes.data.result?.redpacket?.value) console.log('🧧', parseFloat(helpRes.data.result?.redpacket?.value))
-                            console.log('助力结果：'+helpRes)
+                            console.log('助力结果：'+JSON.stringify(helpRes))
                         }else if (bizCode==108) { //无助力
-                            console.log(helpRes.data.bizMsg); break
+                            console.log(JSON.stringify(helpRes));
+
+                            break
                         }else if (bizCode==-201) {//好友人气爆棚，不需要助力啦~
-                            console.log(helpRes);
+                            console.log(JSON.stringify(helpRes));
+
                             inviteId.splice(j, 1)
                             //$.newHelpCodeArr = $.newHelpCodeArr.filter(x => x.pin !== pin)
                             j--
@@ -106,7 +109,8 @@ const JD_API_HOST = 'https://api.m.jd.com/client.action';
                         }else if (bizCode==-1002) {//运行环境异常，请您从正规途径参与活动，谢谢~
                             break;
                         }else {
-                            console.log(helpRes);
+                            console.log(JSON.stringify(helpRes));
+
                             // console.log(log`互助失败，原因：${helpRes?.bizMsg}（${bizCode}）`)
                             // if (![0, -201, -202].includes(bizCode))
                             // break
@@ -114,7 +118,7 @@ const JD_API_HOST = 'https://api.m.jd.com/client.action';
                         await $.wait(1000)
                     }else{
                         //{ code: -40300, msg: '运行环境异常，请您从正规途径参与活动，谢谢~' }
-                        console.log(helpRes);
+                        console.log(JSON.stringify(helpRes));
                         break;
                     }
                 }
