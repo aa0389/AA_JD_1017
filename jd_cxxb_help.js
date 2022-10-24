@@ -1,6 +1,6 @@
 /*
 建议手动先点开一次
-cron "1 15 * * *" jd_cxxb_help.js, tag:快速签到升级，助力跑一次即可
+cron "7 7 7 7 7" jd_cxxb_help.js, tag:快速签到升级，助力跑一次即可
 */
 import {wait} from "./TS_USER_AGENTS";
 

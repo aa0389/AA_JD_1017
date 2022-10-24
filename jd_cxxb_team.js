@@ -1,10 +1,10 @@
 /*
 建议手动先点开一次
-cron "1 8 * * *" jd_cxxb_team.js, tag:快速升级，跑一次即可
+cron "7 7 7 7 7" jd_cxxb_team.js, tag:快速升级，跑一次即可
 */
 var {window,get_log,Env,document}=require('./jdlog.js');//{window,document,navigator,screen,get_log,GetRandomNum,Env,get_log,GetRandomNum,Env}
 
-const $ = new Env('穿行寻宝-助力组队');
+const $ = new Env('穿行寻宝-团队');
 
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 
