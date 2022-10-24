@@ -115,7 +115,7 @@ const JD_API_HOST = 'https://api.m.jd.com/client.action';
                             continue
                         }else if (bizCode==-1002) {//运行环境异常，请您从正规途径参与活动，谢谢~
                             break;
-                        }else if (bizCode==-5001) {//运行环境异常，请您从正规途径参与活动，谢谢~
+                        }else if (bizCode==-5001) {//太火爆了
                             console.log(JSON.stringify(helpRes));
 
                             break;
