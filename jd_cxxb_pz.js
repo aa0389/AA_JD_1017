@@ -111,6 +111,8 @@ function aa_pz() {
     let random=window.smashUtils.getRandom(8);
     let log = get_log(random);
     let body = {"random":random,"log":log,"actionType":"0","inviteId":cxxbCode}
+    console.log(JSON.stringify(body))
+    return ;
     return new Promise((resolve) => {
         $.post(taskPostUrl("promote_pk_collectPkExpandScore", body), async(err, resp, data) => {
             try {
@@ -279,6 +281,8 @@ function taskPostUrl(functionId, body) {
         headers: {
             'Cookie': cookie,
             'Host': 'api.m.jd.com',
+            'Connection': 'keep-alive',
+            'Accept': 'application/json, text/plain, */*',
             'Content-Type': 'application/x-www-form-urlencoded',
             "User-Agent": $.UA,
             'referer': 'https://wbbny.m.jd.com',
@@ -308,7 +312,7 @@ function taskPostUrl2(functionId, body) {
 
 function getUA() {
     $.UUID = randomString(40)
-    $.UA = `jdapp;android;10.3.2`
+    $.UA = `jdapp;iPhone;11.3.0;;;M/5.0;JDEbook/openapp.jdreader;appBuild/168341;jdSupportDarkMode/0;ef/1;ep/%7B%22ciphertype%22%3A5%2C%22cipher%22%3A%7B%22ud%22%3A%22CNS3DzO5DtdwDtVrCwUnD2PsENLwZWC3DQY4EJOnZwCyZwCmCtHvYG%3D%3D%22%2C%22sv%22%3A%22CJGkEK%3D%3D%22%2C%22iad%22%3A%22%22%7D%2C%22ts%22%3A1666620806%2C%22hdid%22%3A%22JM9F1ywUPwflvMIpYPok0tt5k9kW4ArJEU3lfLhxBqw%3D%22%2C%22version%22%3A%221.0.3%22%2C%22appname%22%3A%22com.360buy.jdmobile%22%2C%22ridx%22%3A-1%7D;Mozilla/5.0 (iPhone; CPU iPhone OS 14_8 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1;`
 }
 
 function randomNum(min, max) {
