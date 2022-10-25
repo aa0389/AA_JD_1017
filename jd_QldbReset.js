@@ -23,7 +23,7 @@ let cookiesArr = [], cookie = '', isBox = false, notify, allMessage = '';
 //助力好友分享码(最多3个,否则后面的助力失败),原因:京东农场每人每天只有3次助力机会
 //此此内容是IOS用户下载脚本到本地使用，填写互助码的地方，同一京东账号的好友互助码请使用@符号隔开。
 //下面给出两个账号的填写示例（iOS只支持2个京东账号）
- 
+
 let newShareCodes = [];
 let codeType = 0;
 let shareCodes = []
@@ -50,7 +50,7 @@ let NoNeedCodes = [];
 
     console.log("重置助力码")
     await getAAShareCode();
-    
+
     if ($.isNode() && allMessage && $.ctrTemp) {
         await notify.sendNotify(`${$.name}`, `${allMessage}`)
     }
@@ -60,67 +60,67 @@ let NoNeedCodes = [];
     })
     .finally(() => {
         $.done();
-    }) 
-
-
-    
-    
-
- function getAAShareCode() {
-    return new Promise(async resolve => {
-      $.get({url: `http://192.168.137.129:8080/AA/cronCK/1`, timeout: 30000}, (err, resp, data) => {
-        try {
-          if (err) {
-            console.log(JSON.stringify(err))
-            console.log(`${$.name} API请求失败，请检查网路重试`)
-          } else {
-            if (data) {
-            //   console.log(`随机取个${randomCount}码放到您固定的互助码后面(不影响已有固定互助)`)
-            console.log(`获取到助力码：` + data + "\n")
-              data = data;
-            }
-          }
-        } catch (e) {
-          $.logErr(e, resp)
-        } finally {
-          resolve(data);
-        }
-      })
-      await $.wait(10000);
-      resolve()
     })
-  }
-  
 
 
 
-  
 
 
- function saveAAShareCodeNum(AACode,maxNum) {
+function getAAShareCode() {
     return new Promise(async resolve => {
-      $.get({url: `http://120.46.207.10:8193/setFrultCodeNum/${AACode}/${maxNum}`, timeout: 30000}, (err, resp, data) => {
-        try {
-          if (err) {
-            console.log(JSON.stringify(err))
-            console.log(`${$.name} API请求失败，请检查网路重试`)
-          } else {
-            if (data) {
-            //   console.log(`随机取个${randomCount}码放到您固定的互助码后面(不影响已有固定互助)`)
-            console.log(`\n助力成功 <`+AACode+">，次数为：" + data)
-              data = data;
+        $.get({url: `http://192.168.187.1:8080/AA/cronCK/1`, timeout: 30000}, (err, resp, data) => {
+            try {
+                if (err) {
+                    console.log(JSON.stringify(err))
+                    console.log(`${$.name} API请求失败，请检查网路重试`)
+                } else {
+                    if (data) {
+                        //   console.log(`随机取个${randomCount}码放到您固定的互助码后面(不影响已有固定互助)`)
+                        console.log(`获取到助力码：` + data + "\n")
+                        data = data;
+                    }
+                }
+            } catch (e) {
+                $.logErr(e, resp)
+            } finally {
+                resolve(data);
             }
-          }
-        } catch (e) {
-          $.logErr(e, resp)
-        } finally {
-          resolve(data);
-        }
-      })
- 
-      resolve()
+        })
+        await $.wait(10000);
+        resolve()
     })
-  }
+}
+
+
+
+
+
+
+
+function saveAAShareCodeNum(AACode,maxNum) {
+    return new Promise(async resolve => {
+        $.get({url: `http://120.46.207.10:8193/setFrultCodeNum/${AACode}/${maxNum}`, timeout: 30000}, (err, resp, data) => {
+            try {
+                if (err) {
+                    console.log(JSON.stringify(err))
+                    console.log(`${$.name} API请求失败，请检查网路重试`)
+                } else {
+                    if (data) {
+                        //   console.log(`随机取个${randomCount}码放到您固定的互助码后面(不影响已有固定互助)`)
+                        console.log(`\n助力成功 <`+AACode+">，次数为：" + data)
+                        data = data;
+                    }
+                }
+            } catch (e) {
+                $.logErr(e, resp)
+            } finally {
+                resolve(data);
+            }
+        })
+
+        resolve()
+    })
+}
 
 
 async function doDailyTask() {
@@ -544,7 +544,7 @@ async function turntableFarm() {
 //                 console.log('天天抽奖-不能自己给自己助力\n')
 //                 continue
 //             }
-            
+
 //             await lotteryMasterHelp(code);
 //             if ($.lotteryMasterHelpRes.helpResult) {
 //                 // console.log('天天抽奖助力结果',lotteryMasterHelpRes.helpResult)
@@ -716,7 +716,7 @@ async function masterHelpShare() {
             continue
         }
         await masterHelp(code);
-        
+
         if ($.helpResult.code === '0') {
             if ($.helpResult.helpResult.code === '0') {
                 //助力成功
