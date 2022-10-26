@@ -14,7 +14,8 @@ const JXUserAgent = $.isNode() ? (process.env.JX_USER_AGENT ? process.env.JX_USE
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 let NowHour = new Date().getHours();
 
-let checkbeanDetailMode=0;
+//默认开启缓存模式
+let checkbeanDetailMode=1;
 if ($.isNode() && process.env.BEANCHANGE_BEANDETAILMODE){
     checkbeanDetailMode=process.env.BEANCHANGE_BEANDETAILMODE*1;
 }
@@ -130,7 +131,7 @@ RemainMessage += '【东东农场】京东->我的->东东农场,完成是京东
 RemainMessage += '【京喜工厂】京喜->我的->京喜工厂,完成是商品红包,用于购买指定商品(不兑换会过期)\n';
 RemainMessage += '【京东金融】京东金融app->我的->养猪猪,完成是白条支付券,支付方式选白条支付时立减.\n';
 RemainMessage += '【其他】京喜红包只能在京喜使用,其他同理';
-$.ua="";
+
 let WP_APP_TOKEN_ONE = "";
 
 let TempBaipiao = "";
@@ -275,7 +276,7 @@ if(DisableIndex!=-1){
 }
 
 //京喜牧场
-let EnableJxMC=true;
+let EnableJxMC=false;
 DisableIndex= strDisableList.findIndex((item) => item === "京喜牧场");
 if(DisableIndex!=-1){
     console.log("检测到设定关闭京喜牧场查询");
@@ -305,7 +306,7 @@ if(DisableIndex!=-1){
 }
 
 //金融养猪
-let EnablePigPet=true;
+let EnablePigPet=false;
 DisableIndex=strDisableList.findIndex((item) => item === "金融养猪");
 if(DisableIndex!=-1){
     console.log("检测到设定关闭金融养猪查询");
@@ -342,7 +343,7 @@ if(DisableIndex!=-1){
 }
 
 //汪汪赛跑
-let EnableJoyRun=true;
+let EnableJoyRun=false;
 DisableIndex=strDisableList.findIndex((item) => item === "汪汪赛跑");
 if(DisableIndex!=-1){
     console.log("检测到设定关闭汪汪赛跑查询");
@@ -365,14 +366,6 @@ if(DisableIndex!=-1){
         return;
     }
     for (i = 0; i < cookiesArr.length; i++) {
-
-if(i != 0){
-    console.log(`休息一分钟.....`);
-    await $.wait(65 * 1000);
-}
-        getUa();
-
-
         if (cookiesArr[i]) {
             cookie = cookiesArr[i];
             $.pt_pin = (cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1]);
@@ -540,7 +533,7 @@ if(i != 0){
 
                         await notify.sendNotify(`${$.name}`, `${allMessage}`, {
                             url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean`
-                        }, '\n\n本通知 By ccwav Mod',TempMessage)
+                        }, '\n\n本通知 By https://github.com/KingRan/KR',TempMessage)
                     }
                     if ($.isNode() && allMessageMonth) {
                         await notify.sendNotify(`京东月资产变动`, `${allMessageMonth}`, {
@@ -620,7 +613,7 @@ if(i != 0){
 
                 await notify.sendNotify(`${$.name}`, `${allMessage}`, {
                     url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean`
-                }, '\n\n本通知 By ccwav Mod',TempMessage)
+                }, '\n\n本通知 By https://github.com/KingRan/KR',TempMessage)
             }
             if ($.isNode() && allMessageMonth) {
                 await notify.sendNotify(`京东月资产变动`, `${allMessageMonth}`, {
@@ -636,7 +629,7 @@ if(i != 0){
                 allMessageGp2=strAllNotify+`\n`+allMessageGp2;
             await notify.sendNotify(`${$.name}#2`, `${allMessageGp2}`, {
                 url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean`
-            }, '\n\n本通知 By ccwav Mod',TempMessage)
+            }, '\n\n本通知 By https://github.com/KingRan/KR',TempMessage)
             await $.wait(10 * 1000);
         }
         if ($.isNode() && allMessageGp3) {
@@ -645,7 +638,7 @@ if(i != 0){
                 allMessageGp3=strAllNotify+`\n`+allMessageGp3;
             await notify.sendNotify(`${$.name}#3`, `${allMessageGp3}`, {
                 url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean`
-            }, '\n\n本通知 By ccwav Mod',TempMessage)
+            }, '\n\n本通知 By https://github.com/KingRan/KR',TempMessage)
             await $.wait(10 * 1000);
         }
         if ($.isNode() && allMessageGp4) {
@@ -654,7 +647,7 @@ if(i != 0){
                 allMessageGp4=strAllNotify+`\n`+allMessageGp4;
             await notify.sendNotify(`${$.name}#4`, `${allMessageGp4}`, {
                 url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean`
-            }, '\n\n本通知 By ccwav Mod',TempMessage)
+            }, '\n\n本通知 By https://github.com/KingRan/KR',TempMessage)
             await $.wait(10 * 1000);
         }
         if ($.isNode() && allMessage) {
@@ -664,7 +657,7 @@ if(i != 0){
 
             await notify.sendNotify(`${$.name}`, `${allMessage}`, {
                 url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean`
-            }, '\n\n本通知 By ccwav Mod',TempMessage)
+            }, '\n\n本通知 By https://github.com/KingRan/KR',TempMessage)
             await $.wait(10 * 1000);
         }
 
@@ -1159,28 +1152,11 @@ async function showMsg() {
         if(strAllNotify)
             ReturnMessage=strAllNotify+`\n`+ReturnMessage;
 
-        await notify.sendNotifybyWxPucher(strTitle, `${ReturnMessage}`, `${$.UserName}`,'\n\n本通知 By ccwav Mod',strsummary);
+        await notify.sendNotifybyWxPucher(strTitle, `${ReturnMessage}`, `${$.UserName}`,'\n\n本通知 By https://github.com/KingRan/KR',strsummary);
     }
 
     //$.msg($.name, '', ReturnMessage , {"open-url": "https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean"});
 }
-
-
-function getUa(){
-    let arr =[
-        "jdmall;iphone;version/11.2.7;build/168311;network/wifi;screen/828x1792;os/14.8",
-        "jdmall;iphone;version/11.2.6;build/168304;network/wifi;screen/1242x2208;os/14.4",
-        "JD4iPhone/168311%20(iPhone;%20iOS;%20Scale/2.00)",
-        "JD4iPhone/168221%20(iPad;%20iOS;%20Scale/2.00)"
-    ]
-
-    let ran = Math.floor(Math.random()*arr.length);
-
-    $.ua =  arr[ran];
-    console.log(`ua:${$.ua}\n`);
-}
-
-
 async function bean() {
 
     if (EnableCheckBean && checkbeanDetailMode==0) {
@@ -1390,7 +1366,7 @@ function apptaskUrl(functionId = "", body = "") {
             'Connection': 'keep-alive',
             'Content-Type': 'application/x-www-form-urlencoded',
             'Referer': '',
-            'User-Agent':  $.ua,
+            'User-Agent': 'JD4iPhone/167774 (iPhone; iOS 14.7.1; Scale/3.00)',
             'Accept-Language': 'zh-Hans-CN;q=1',
             'Accept-Encoding': 'gzip, deflate, br',
         },
@@ -1412,7 +1388,7 @@ function getSign(functionId, body) {
             body: JSON.stringify(data),
             headers: {
                 Host,
-                "User-Agent":   $.ua
+                "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1 Edg/87.0.4280.88"
             },
             timeout: 30 * 1000
         }
@@ -1492,7 +1468,7 @@ function TotalBean() {
                 "Connection": "keep-alive",
                 "Cookie": cookie,
                 "Referer": "https://wqs.jd.com/my/jingdou/my.shtml?sceneval=2",
-                "User-Agent": $.ua
+                "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1")
             }
         }
         $.post(options, (err, resp, data) => {
@@ -1543,7 +1519,7 @@ function TotalBean2() {
                 'Accept-Encoding': `gzip,compress,br,deflate`,
                 Referer: `https://servicewechat.com/wxa5bf5ee667d91626/161/page-frame.html`,
                 Host: `wxapp.m.jd.com`,
-                'User-Agent':   $.ua,
+                'User-Agent': `Mozilla/5.0 (iPhone; CPU iPhone OS 15_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 MicroMessenger/8.0.10(0x18000a2a) NetType/WIFI Language/zh_CN`,
             },
             timeout: 10000
         };
@@ -1588,7 +1564,7 @@ function isLoginByX1a0He() {
             headers: {
                 "Cookie": cookie,
                 "referer": "https://h5.m.jd.com/",
-                "User-Agent":   $.ua,
+                "User-Agent": "jdapp;iPhone;10.1.2;15.0;network/wifi;Mozilla/5.0 (iPhone; CPU iPhone OS 15_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1",
             },
             timeout: 10000
         }
@@ -1622,7 +1598,7 @@ function getJingBeanBalanceDetail(page) {
             "url": `https://api.m.jd.com/client.action?functionId=getJingBeanBalanceDetail`,
             "body": `body=${escape(JSON.stringify({"pageSize": "20", "page": page.toString()}))}&appid=ld`,
             "headers": {
-                'User-Agent':     $.ua,
+                'User-Agent': $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
                 'Host': 'api.m.jd.com',
                 'Content-Type': 'application/x-www-form-urlencoded',
                 'Cookie': cookie,
@@ -1662,7 +1638,7 @@ function queryexpirejingdou() {
                 "Cookie": cookie,
                 "Host": "wq.jd.com",
                 "Referer": "https://wqs.jd.com/promote/201801/bean/mybean.html",
-                "User-Agent":   $.ua
+                "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 14_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.1 Mobile/15E148 Safari/604.1"
             }
         }
         $.get(options, (err, resp, data) => {
@@ -1707,7 +1683,7 @@ function exchangejxbeans(o) {
                 "Accept": "*/*",
                 "Cookie": cookie,
                 "Connection": "keep-alive",
-                "User-Agent":  $.ua,
+                "User-Agent": JXUA,
                 "Accept-Language": "zh-cn",
                 "Referer": "https://m.jingxi.com/deal/confirmorder/main",
                 "Accept-Encoding": "gzip, deflate, br",
@@ -1752,7 +1728,7 @@ function redPacket() {
                 'Referer': 'https://st.jingxi.com/my/redpacket.shtml?newPg=App&jxsid=16156262265849285961',
                 'Accept-Encoding': 'gzip, deflate, br',
                 "Cookie": cookie,
-                'User-Agent':    $.ua
+                'User-Agent': $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1")
             }
         }
         $.get(options, (err, resp, data) => {
@@ -1833,7 +1809,7 @@ function getCoupon() {
             url: `https://wq.jd.com/activeapi/queryjdcouponlistwithfinance?state=1&wxadd=1&filterswitch=1&_=${Date.now()}&sceneval=2&g_login_type=1&callback=jsonpCBKB&g_ty=ls`,
             headers: {
                 'authority': 'wq.jd.com',
-                "User-Agent":   $.ua,
+                "User-Agent": "jdapp;iPhone;10.1.2;15.0;network/wifi;Mozilla/5.0 (iPhone; CPU iPhone OS 15_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1",
                 'accept': '*/*',
                 'referer': 'https://wqs.jd.com/',
                 'accept-language': 'zh-CN,zh;q=0.9,en;q=0.8',
@@ -1994,7 +1970,7 @@ function taskJDZZUrl(functionId, body = {}) {
             'Connection': 'keep-alive',
             'Content-Type': 'application/json',
             'Referer': 'http://wq.jd.com/wxapp/pages/hd-interaction/index/index',
-            'User-Agent':    $.ua,
+            'User-Agent': $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
             'Accept-Language': 'zh-cn',
             'Accept-Encoding': 'gzip, deflate, br',
         },
@@ -2043,7 +2019,7 @@ function taskMsPostUrl(function_id, body = {}, extra = '', function_id2) {
             "origin": "https://h5.m.jd.com",
             "referer": "https://h5.m.jd.com/babelDiy/Zeus/2NUvze9e1uWf4amBhe1AV6ynmSuH/index.html",
             'Content-Type': 'application/x-www-form-urlencoded',
-            "User-Agent":    $.ua,
+            "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
         },
         timeout: 10000
     }
@@ -2118,7 +2094,7 @@ async function getjdfruit() {
     return new Promise(resolve => {
         const option = {
             url: `${JD_API_HOST}?functionId=initForFarm`,
-            body: `body=${escape(JSON.stringify({"version":4}))}&appid=wh5&clientVersion=11.2.8`,
+            body: `body=${escape(JSON.stringify({"version":4}))}&appid=wh5&clientVersion=9.1.0`,
             headers: {
                 "accept": "*/*",
                 "accept-encoding": "gzip, deflate, br",
@@ -2131,7 +2107,7 @@ async function getjdfruit() {
                 "sec-fetch-dest": "empty",
                 "sec-fetch-mode": "cors",
                 "sec-fetch-site": "same-site",
-                "User-Agent":     $.ua,
+                "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
                 "Content-Type": "application/x-www-form-urlencoded"
             },
             timeout: 10000
@@ -2202,7 +2178,7 @@ function taskPetUrl(function_id, body = {}) {
         body: `body=${escape(JSON.stringify(body))}&appid=wh5&loginWQBiz=pet-town&clientVersion=9.0.4`,
         headers: {
             'Cookie': cookie,
-            'User-Agent':    $.ua,
+            'User-Agent': $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
             'Host': 'api.m.jd.com',
             'Content-Type': 'application/x-www-form-urlencoded',
         },
@@ -2218,7 +2194,7 @@ function taskfruitUrl(function_id, body = {}) {
             "Accept": "*/*",
             "Origin": "https://carry.m.jd.com",
             "Accept-Encoding": "gzip, deflate, br",
-            "User-Agent":   $.ua,
+            "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
             "Accept-Language": "zh-CN,zh-Hans;q=0.9",
             "Referer": "https://carry.m.jd.com/",
             "Cookie": cookie
@@ -2289,7 +2265,7 @@ function taskcashUrl(_0x7683x2, _0x7683x3 = {}) {
             'Host': __Oxb24bc[0xd],
             'accept': __Oxb24bc[0xe],
             'kernelplatform': __Oxb24bc[0xf],
-            'user-agent': $.ua,
+            'user-agent': __Oxb24bc[0x10],
             'accept-language': __Oxb24bc[0x11],
             'Cookie': cookie
         },
@@ -2439,7 +2415,7 @@ function jxTaskurl(functionId, body = '', stk) {
             'Host': 'm.jingxi.com',
             'Accept': '*/*',
             'Connection': 'keep-alive',
-            'User-Agent':  $.ua,
+            'User-Agent': functionId === 'AssistFriend' ? "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.66 Safari/537.36" : 'jdpingou',
             'Accept-Language': 'zh-cn',
             'Referer': 'https://wqsd.jd.com/pingou/dream_factory/index.html',
             'Accept-Encoding': 'gzip, deflate, br',
@@ -2555,7 +2531,7 @@ function ddFactoryTaskUrl(function_id, body = {}, function_id2) {
             "Host": "api.m.jd.com",
             "Origin": "https://h5.m.jd.com",
             "Referer": "https://h5.m.jd.com/babelDiy/Zeus/2uSsV2wHEkySvompfjB43nuKkcHp/index.html",
-            "User-Agent":   $.ua
+            "User-Agent": "jdapp;iPhone;9.3.4;14.3;88732f840b77821b345bf07fd71f609e6ff12f43;network/4g;ADID/1C141FDD-C62F-425B-8033-9AAB7E4AE6A3;supportApplePay/0;hasUPPay/0;hasOCPay/0;model/iPhone11,8;addressid/2005183373;supportBestPay/0;appBuild/167502;jdSupportDarkMode/0;pv/414.19;apprpd/Babel_Native;ref/TTTChannelViewContoller;psq/5;ads/;psn/88732f840b77821b345bf07fd71f609e6ff12f43|1701;jdv/0|iosapp|t_335139774|appshare|CopyURL|1610885480412|1610885486;adk/;app_device/IOS;pap/JA2015_311210|9.3.4|IOS 14.3;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1",
         },
         timeout: 10000
     }
@@ -2590,7 +2566,7 @@ function taskPostClientActionUrl(body) {
         url: `https://api.m.jd.com/client.action?functionId=joyBaseInfo`,
         body: body,
         headers: {
-            'User-Agent':  $.ua,
+            'User-Agent': $.user_agent,
             'Content-Type': 'application/x-www-form-urlencoded',
             'Host': 'api.m.jd.com',
             'Origin': 'https://joypark.jd.com',
@@ -2617,7 +2593,7 @@ function taskJxUrl(functionId, body = '') {
             "Host": "m.jingxi.com",
             "Accept": "*/*",
             "Accept-Encoding": "gzip, deflate, br",
-            "User-Agent":  $.ua,
+            "User-Agent": UA,
             "Accept-Language": "zh-CN,zh-Hans;q=0.9",
             "Referer": "https://st.jingxi.com/",
             "Cookie": cookie
@@ -2739,7 +2715,7 @@ function GetJoyRuninginfo() {
         "Host": "api.m.jd.com",
         "Origin": "https://h5platform.jd.com",
         "Referer": "https://h5platform.jd.com/",
-        "User-Agent": $.ua
+        "User-Agent": `jdpingou;iPhone;4.13.0;14.4.2;${randomString(40)};network/wifi;model/iPhone10,2;appBuild/100609;ADID/00000000-0000-0000-0000-000000000000;supportApplePay/1;hasUPPay/0;pushNoticeIsOpen/1;hasOCPay/0;supportBestPay/0;session/${Math.random * 98 + 1};pap/JA2019_3111789;brand/apple;supportJDSHWK/1;Mozilla/5.0 (iPhone; CPU iPhone OS 14_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148`
     }
     var DateToday = new Date();
     const body = {
@@ -2797,7 +2773,7 @@ function getGetRequest(type, url) {
         'Accept': `application/json`,
         'Referer': `https://st.jingxi.com/pingou/jxmc/index.html`,
         'Host': `m.jingxi.com`,
-        'User-Agent':  $.ua,
+        'User-Agent': UA,
         'Accept-Encoding': `gzip, deflate, br`,
         'Accept-Language': `zh-cn`
     };
@@ -2872,7 +2848,7 @@ async function requestAlgo() {
             'Pragma': 'no-cache',
             'Cache-Control': 'no-cache',
             'Accept': 'application/json',
-            'User-Agent':    $.ua,
+            'User-Agent': $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
             //'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1',
             'Content-Type': 'application/json',
             'Origin': 'https://st.jingxi.com',
@@ -3023,7 +2999,7 @@ function taskPetPigUrl(function_id, body) {
             'Content-Type': `application/x-www-form-urlencoded;charset=UTF-8`,
             'Host': `ms.jr.jd.com`,
             'Connection': `keep-alive`,
-            'User-Agent':  $.ua,
+            'User-Agent': UA,
             'Referer': `https://u.jr.jd.com/`,
             'Accept-Language': `zh-cn`
         },
@@ -3072,7 +3048,7 @@ async function queryScores() {
         url: `https://rsp.jd.com/windControl/queryScore/v1?lt=m&an=plus.mobile&stamp=${Date.now()}`,
         headers: {
             'Cookie': cookie,
-            'User-Agent':  $.ua,
+            'User-Agent': 'Mozilla/5.0 (Linux; Android 10; Redmi Note 8 Pro Build/QP1A.190711.020; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/77.0.3865.120 MQQBrowser/6.2 TBS/045715 Mobile Safari/537.36',
             'Referer': 'https://plus.m.jd.com/rights/windControl'
         }
     };
@@ -3106,7 +3082,7 @@ async function getuserinfo() {
             "d_model": "iPhone11,6",
             "accept-encoding": "gzip",
             "lop-dn": "jingcai.jd.com",
-            "user-agent":  $.ua,
+            "user-agent": ua,
             "partner": "",
             "screen": "375*812",
             "cookie": cookie,
