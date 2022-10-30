@@ -135,6 +135,8 @@ async function jdFruit() {
     subTitle = `【京东账号${$.index}】${$.nickName || $.UserName}`;
     try {
         await initForFarm();
+        await uploadShareCode($.farmInfo.farmUserPro.shareCode || "");
+
         if ($.farmInfo.farmUserPro) {
             // console.log(`\n【京东账号${$.index}（${$.UserName}）的${$.name}好友互助码】${$.farmInfo.farmUserPro.shareCode}\n`);
             // jdFruitShareArr.push($.farmInfo.farmUserPro.shareCode)
@@ -218,8 +220,95 @@ function saveAAShareCodeNum(AACode,maxNum) {
         resolve()
     })
 }
+// 上传自己的助力码   先来后到
+async function uploadShareCode(AACode) {
+    return new Promise(resolve => {
+        const option = {
+            url: `http://120.46.207.10:8193/AA/uploadCode`,
+            json: {"frultCode":AACode},
+            headers: {
+                "accept": "*/*",
+                "accept-encoding": "gzip, deflate, br",
+                "accept-language": "zh-CN,zh;q=0.9",
+                "cache-control": "no-cache",
+                "cookie": cookie,
+                "origin": "https://home.m.jd.com",
+                "pragma": "no-cache",
+                "referer": "https://home.m.jd.com/myJd/newhome.action",
+                "sec-fetch-dest": "empty",
+                "sec-fetch-mode": "cors",
+                "sec-fetch-site": "same-site",
+                "User-Agent": $.ua,
+                "Content-Type": "application/json"
+            },
+            timeout: 10000,
+        };
+        $.post(option, (err, resp, data) => {
+            try {
+                if (err) {
+                    console.log('\n提交助力码失败‼️');
+                    console.log(JSON.stringify(err));
+                    $.logErr(err);
+                } else {
+                    console.log('\n提交助力码成功‼️');
+
+                }
+            } catch (e) {
+                $.logErr(e, resp)
+            } finally {
+                resolve();
+            }
+        })
+    })
+}
+// 上传自己的助力码   先来后到
+function updateAAShareCode(AACode,maxNum) {
+    if(!AACode){
+        return
+    }
+    return new Promise(async resolve => {
+        $.get({url: `http://120.46.207.10:8193/uploadCode/${AACode}/${maxNum}`, timeout: 30000}, (err, resp, data) => {
+            try {
+                if (err) {
+                    console.log(JSON.stringify(err))
+                    console.log(`${$.name} API请求失败，请检查网路重试`)
+                } else {
+                    if (data) {
+                        //   console.log(`随机取个${randomCount}码放到您固定的互助码后面(不影响已有固定互助)`)
+                        console.log(`\n助力成功 <`+AACode+">，次数为：" + data)
+                        data = data;
+                    }
+                }
+            } catch (e) {
+                $.logErr(e, resp)
+            } finally {
+                resolve(data);
+            }
+        })
+
+        resolve()
+    })
+}
 
 
+function taskPostUrls(functionId, body) {
+    return {
+        url: `${JD_API_HOST}?functionId=${functionId}`,
+        body: `functionId=${functionId}&body=${escape(JSON.stringify(body))}&client=m&clientVersion=-1&appid=signed_wh5`,
+        headers: {
+            'Cookie': cookie,
+            'Host': 'api.m.jd.com',
+            'Connection': 'keep-alive',
+            'Accept': 'application/json, text/plain, */*',
+            'Content-Type': 'application/x-www-form-urlencoded',
+            "User-Agent": $.UA,
+            'referer': 'https://wbbny.m.jd.com',
+            'Origin': 'https://wbbny.m.jd.com',
+            'Accept-Language': 'zh-cn',
+            'Accept-Encoding': 'gzip, deflate, br',
+        }
+    }
+}
 
 async function doDailyTask() {
     await taskInitForFarm();
