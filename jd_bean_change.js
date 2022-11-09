@@ -15,10 +15,10 @@ const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 let NowHour = new Date().getHours();
 
 //默认开启缓存模式
-let checkbeanDetailMode=1;
-if ($.isNode() && process.env.BEANCHANGE_BEANDETAILMODE){
-    checkbeanDetailMode=process.env.BEANCHANGE_BEANDETAILMODE*1;
-}
+let checkbeanDetailMode=0;
+// if ($.isNode() && process.env.BEANCHANGE_BEANDETAILMODE){
+//     checkbeanDetailMode=process.env.BEANCHANGE_BEANDETAILMODE*1;
+// }
 
 const fs = require('fs');
 let matchtitle="昨日";
@@ -428,6 +428,10 @@ if(DisableIndex!=-1){
             TempBaipiao = "";
             strGuoqi="";
             console.log(`******开始查询【京东账号${$.index}】${$.nickName || $.UserName}*********`);
+
+            await $.wait(10*1000);
+
+
             await TotalBean();
             //await TotalBean2();
             if ($.beanCount == 0) {
