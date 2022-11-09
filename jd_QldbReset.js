@@ -68,7 +68,7 @@ let NoNeedCodes = [];
 
 function getAAShareCode() {
     return new Promise(async resolve => {
-        $.get({url: `http://192.168.187.1:8080/AA/cronCK/1`, timeout: 30000}, (err, resp, data) => {
+        $.get({url: `http://192.168.192.184:8193/AA/cronCK/1`, timeout: 30000}, (err, resp, data) => {
             try {
                 if (err) {
                     console.log(JSON.stringify(err))
