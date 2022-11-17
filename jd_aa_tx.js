@@ -5,7 +5,7 @@
 默认定时不跑！只打扫和助力
 助理吗变量：多个用&号隔开
 
-0 0-23/2 * * * https://raw.githubusercontent.com/6dylan6/jdpro/main/jd_makemoneyshop.js
+0 0-23/2 * * * https://github.com/aa0389/AA_JD_1017/blob/main/jd_aa_tx.js
  */
 
 const $ = new Env('特价版大赢家');
