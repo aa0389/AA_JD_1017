@@ -1,9 +1,14 @@
 
 /*
-30 5,8 * * * https://github.com/aa0389/AA_JD_1017/blob/main/jd_aa_tx.js
+京东特价APP首页-赚钱大赢家
+进APP看看，能不能进去，基本都黑的！！！
+默认定时不跑！只打扫和助力
+助理吗变量：多个用&号隔开
+
+0 0-23/2 * * * https://raw.githubusercontent.com/6dylan6/jdpro/main/jd_makemoneyshop.js
  */
 
-const $ = new Env('aa每天提现3毛');
+const $ = new Env('特价版大赢家');
 const notify = $.isNode() ? require('./sendNotify') : '';
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 //IOS等用户直接用NobyDa的jd cookie
@@ -25,13 +30,14 @@ if (process.env.DYJSHAREID) {
     }
 }
 let helpinfo = {};
+$.ua="JD4iPhone/168221%20(iPad;%20iOS;%20Scale/2.00)";
+$.ck="";
+$.cash="1"
+$.canUseCoinAmount=0;
+$.aaId='1';
 !(async () => {
-    if (!cookiesArr[0]) {
-        $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', { "open-url": "https://bean.m.jd.com/bean/signIndex.action" });
-        return;
-    }
+    //  let arr = [
 
-    console.log("8成是黑号\n")
 
     for (let i = 0; i < cookiesArr.length; i++) {
         if (cookiesArr[i]) {
@@ -53,16 +59,24 @@ let helpinfo = {};
                 continue
             }
 
+
             await getinfo(1);
             if (helpinfo[$.UserName].hot) continue;
             await $.wait(500);
             await gettask();
             await $.wait(500);
             if ($.taskstate !==1) await Award();
-            await $.wait(10000);
-            await getTx();
+            await $.wait(500);
+            await getTxquery();
+            await $.wait(5000);
             console.log("等待20秒 提现3毛 到账可能1个小时")
-            await $.wait(20000);
+
+            if($.aaId=='1' && $.canUseCoinAmount >0.3){
+                console.log('没库存');
+                break
+            }
+
+            // break;
 
         }
     }
@@ -76,8 +90,96 @@ let helpinfo = {};
     })
 
 
-function getTx2(id) {
 
+function getUa(){
+    let arr =[
+        "jdmall;iphone;version/11.2.7;build/168311;network/wifi;screen/828x1792;os/14.8",
+        "jdmall;iphone;version/11.2.6;build/168304;network/wifi;screen/1242x2208;os/14.4",
+        "JD4iPhone/168311%20(iPhone;%20iOS;%20Scale/2.00)",
+        "JD4iPhone/168221%20(iPad;%20iOS;%20Scale/2.00)"
+    ]
+
+    let ran = Math.floor(Math.random()*arr.length);
+
+    $.ua =  arr[ran];
+    console.log(`ua:${$.ua}\n`);
+}
+
+
+
+function getTxquery() {
+    return new Promise(async resolve => {
+        const options = {
+            url: `https://wq.jd.com/makemoneyshop/exchangequery?g_ty=h5&g_tk=&appCode=msc588d6d5&activeId=63526d8f5fe613a6adb48f03&sceneval=2&callback=__jsonp${new Date().getTime()}`,
+            headers: {
+                Host: "wq.jd.com",
+                Accept: "*/*",
+                Connection: "keep-alive",
+                Cookie: cookie,
+                "User-Agent": UA,
+                "Accept-Language": "zh-cn",
+                "Referer": "https://wqs.jd.com/",
+                "Accept-Encoding": "gzip, deflate, br"
+            }
+        }
+
+        $.get(options, (err, resp, data) => {
+            try {
+                if (err) {
+                    console.log(JSON.stringify(err))
+                    console.log(`${$.name} API请求失败，请检查网路重试`)
+                } else {
+                    if (data) {
+                        let str = data.substring(21,data.length-1);
+                        data = JSON.parse(str);
+                        // console.log(data.data.cashExchangeRuleList);
+                        let arr = data.data.cashExchangeRuleList;
+
+
+                        let flat=0;
+                        $.aaId='1';
+                        for(let i =0;i < arr.length;i++){
+                            let item = arr[i];
+                            if(item.cashoutAmount == '20' && item.exchangeStatus==1 && $.canUseCoinAmount >= 20){
+                                flat=20;
+                                $.aaId = item.id;
+                                break;
+                            }else if(item.cashoutAmount == '8' && item.exchangeStatus==1 && flat < 8  && $.canUseCoinAmount >= 8){
+                                flat=8;
+                                $.aaId = item.id;
+                            }else if(item.cashoutAmount == '3' && item.exchangeStatus==1 && flat < 3  && $.canUseCoinAmount >= 3){
+                                flat=3;
+                                $.aaId = item.id;
+                            }else if(item.cashoutAmount == '1' && item.exchangeStatus==1 && flat < 1  && $.canUseCoinAmount >= 1){
+                                flat=1;
+                                $.aaId = item.id;
+                            }else if(item.cashoutAmount == '0.3' && item.exchangeStatus==1 && flat < 0.3 && $.canUseCoinAmount >= 0.3){
+                                flat=0.3;
+                                $.aaId = item.id;
+                            }
+                        }
+                        console.log("flat："+flat+",id="+$.aaId);
+                        if(flat == 0 || $.aaId =='1'){
+                            return;
+                        }
+
+
+                        getTx3($.aaId);
+                    }
+                }
+            } catch (e) {
+                $.logErr(e, resp)
+            } finally {
+                resolve(data);
+            }
+        })
+
+        resolve()
+    })
+}
+
+
+function getTx3(id) {
 
     return new Promise(async resolve => {
 
@@ -133,16 +235,23 @@ function getTx2(id) {
 }
 
 
-function getTx() {
+
+
+function getTx2(id,ck) {
+
+
+    console.log("开始ck: "+ ck + "\n");
     return new Promise(async resolve => {
+
+
         const options = {
-            url: `https://wq.jd.com/makemoneyshop/exchangequery?g_ty=h5&g_tk=&appCode=msc588d6d5&activeId=63526d8f5fe613a6adb48f03&sceneval=2&callback=__jsonp${new Date().getTime()}`,
+            url: `https://wq.jd.com/prmt_exchange/client/exchange?g_ty=h5&g_tk=&appCode=msc588d6d5&bizCode=makemoneyshop&ruleId=`+id+`&sceneval=2&callback=__jsonp${new Date().getTime()}`,
             headers: {
                 Host: "wq.jd.com",
                 Accept: "*/*",
                 Connection: "keep-alive",
-                Cookie: cookie,
-                "User-Agent": UA,
+                Cookie: ck,
+                "User-Agent": $.ua,
                 "Accept-Language": "zh-cn",
                 "Referer": "https://wqs.jd.com/",
                 "Accept-Encoding": "gzip, deflate, br"
@@ -156,16 +265,22 @@ function getTx() {
                     console.log(`${$.name} API请求失败，请检查网路重试`)
                 } else {
                     if (data) {
-                        let str = data.substring(21,data.length-1);
-                        data = JSON.parse(str);
-                        // console.log(data.data.cashExchangeRuleList);
-                        let arr = data.data.cashExchangeRuleList;
-                        for(let i =0;i < arr.length;i++){
-                            let item = arr[i];
-                            if(item.cashoutAmount == '0.3'){
-                                getTx2(item.id);
-                            }
-                        }
+                        //   console.log(`随机取个${randomCount}码放到您固定的互助码后面(不影响已有固定互助)`)
+                        // let str = data.substring(21,data.length-1);
+                        // let tostr = data.match(/\((\{.*?\})\n\)/)[1];
+                        // data = eval('(' + tostr + ')');
+                        console.log(data)
+                        // data = str;
+                        // let arr = data.data.cashExchangeRuleList;
+                        // for(let i =0;i < arr.length;i++){
+                        //     let item = arr[i];
+                        //     if(item.cashoutAmount == '20'){
+                        //             $.id20 = item.id;
+                        //     }else if(item.cashoutAmount == '8'){
+                        //         $.id8 = item.id;
+                        //     }
+                        // }
+
                     }
                 }
             } catch (e) {
@@ -178,6 +293,7 @@ function getTx() {
         resolve()
     })
 }
+
 
 
 
@@ -196,6 +312,7 @@ function getinfo(xc) {
                             let sId = data.data.shareId;
                             console.log('助力码：' + sId);
                             console.log('当前营业金：' + data.data.canUseCoinAmount);
+                            $.canUseCoinAmount=data.data.canUseCoinAmount;
                         }
                     } else {
                         console.log(data.msg);
@@ -262,6 +379,38 @@ function Award() {
 }
 
 
+function help(shareid) {
+    return new Promise(async (resolve) => {
+        $.get(taskUrl('makemoneyshop/guesthelp', `activeId=63526d8f5fe613a6adb48f03&shareId=${shareid}&_stk=activeId,shareId&_ste=1`), async (err, resp, data) => {
+            try {
+                if (err) {
+                    console.log(`${JSON.stringify(err)}`)
+                    console.log(` API请求失败，请检查网路重试`)
+                } else {
+                    let tostr = data.match(/\((\{.*?\})\)/)[1];
+                    data = eval('(' + tostr + ')');
+                    if (data.code == 0) {
+                        console.log('助力成功！');
+                        helpinfo[$.UserName].nohelp = 1;
+                    } else if (data.msg === '已助力') {
+                        console.log('你已助力过TA！')
+                        helpinfo[$.UserName].nohelp = 1;
+                    } else if (data.code === 1006) {
+                        console.log('不能助力自己！');
+                    } else if (data.code === 1008) {
+                        console.log('今日无助力次数了！');
+                    } else {
+                        console.log(data.msg);
+                    }
+                }
+            } catch (e) {
+                $.logErr(e, resp)
+            } finally {
+                resolve(data)
+            }
+        })
+    })
+}
 
 function taskUrl(fn, body) {
     return {
